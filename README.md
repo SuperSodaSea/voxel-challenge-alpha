@@ -1,10 +1,10 @@
 # <a name="title">Taichi Voxel Challenge</a>
 
 <p align="center">
-<img src="demo.jpg" width="75%"></img>
+<img src="diamond_ore.jpg" width="75%"></img>
+<br>
+<a href="https://github.com/SuperSodaSea/voxel-challenge-alpha/blob/main/diamond_ore.py">Diamond Ore</a>
 </p>
-
-> Figure: result of `python3 example6.py`. Please replace the image above (`demo.jpg`) with yours, so that other people can immediately see your results :-)
 
 We invite you to create your voxel artwork, by putting your [Taichi](https://github.com/taichi-dev/taichi) code in `main.py`!
 
@@ -46,10 +46,6 @@ pip3 install -r requirements.txt
 to install the dependencies of the voxel renderer.
 
 ## Quickstart
-
-```sh
-python3 example1.py  # example2/3/.../7/8.py
-```
 
 Mouse and keyboard interface:
 
