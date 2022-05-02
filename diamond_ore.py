@@ -11,8 +11,8 @@ def set(idx, mat, color, noise = vec3(0)): scene.set_voxel(idx, mat, color + ti.
 ore = ti.field(ti.i32, (16, 16))
 @ti.func
 def initializeOre():
-    i = 0
-    while i < 256:
+    ti.loop_config(serialize = True)
+    for _ in range(256):
         d = ti.cast(4 * (ti.random() ** 2) + 2, ti.i32)
         x0, y0 = ti.cast((13 - d) * ti.random() + 2, ti.i32), ti.cast(12 * ti.random() + 2, ti.i32)
         ok = True
@@ -20,7 +20,6 @@ def initializeOre():
             if ore[y, x]: ok = False
         if ok:
             for x in range(x0, x0 + d): ore[y0, x] = 1
-        i += 1
     for x, y in ti.ndrange((2, 14), (2, 14)):
         if ti.random() < 0.1 and ore[y, x - 1] == 0 and ore[y, x + 1] == 0: ore[y, x] = 2
 
@@ -47,32 +46,32 @@ def initialize():
         size, mat = 2 if ti.random() < 0.2 else 1, 2 if ti.random() < 0.5 else 1
         x, z = ti.cast(24 * ti.randn() - 8, ti.i32), ti.cast(24 * ti.randn() + 8, ti.i32)
         x, z = ti.min(ti.max(x, -64), 64 - size), ti.min(ti.max(z, -64), 64 - size)
-        for x1, y1, z1 in ti.ndrange(size, size, size):
-            set(vec3(x + x1, -64 + y1, z + z1), mat, vec3(0.2, 0.7, 0.6), vec3(0.1))
+        for p in ti.grouped(ti.ndrange(size, size, size)):
+            set(ivec3(x, -64, z) + p, mat, vec3(0.2, 0.7, 0.6), vec3(0.1))
     
     initializeOre()
-    px, py, pz, s = -40, -64, -24, 4
-    for P in ti.grouped(ti.ndrange((px + s - 1, px + 15 * s + 1), (py + s - 1, py + 15 * s + 1),
-        (pz + s - 1, pz + 15 * s + 1))): set(P, 2, vec3(0.2, 0.7, 0.6))
+    c, s = ivec3(-40, -64, -24), 4
+    for p in ti.grouped(ti.ndrange((c.x + s - 1, c.x + 15 * s + 1), (c.y + s - 1, c.y + 15 * s + 1),
+        (c.z + s - 1, c.z + 15 * s + 1))): set(p, 2, vec3(0.2, 0.7, 0.6))
     for x, y in ti.ndrange(16, 16):
         if not ore[y, x]:
             color, noise = vec3(0.2) + ti.random() * vec3(0.1), vec3(0.05)
-            for x1, y1, z1 in ti.ndrange(s, s, s):
-                set(vec3(px + s * (15 - x) + x1, py + s * (15 - y) + y1, pz + z1), 1, color, noise)
-                set(vec3(px + s * x + x1, py + s * (15 - y) + y1, pz + 15 * s + z1), 1, color, noise)
-                set(vec3(px + s * (15 - x) + x1, py + y1, pz + s * y + z1), 1, color, noise)
-                set(vec3(px + s * x + x1, py + 15 * s + y1, pz + s * y + z1), 1, color, noise)
-                set(vec3(px + x1, py + s * (15 - y) + y1, pz + s * x + z1), 1, color, noise)
-                set(vec3(px + 15 * s + x1, py + s * (15 - y) + y1, pz + s * (15 - x) + z1), 1, color, noise)
+            for p in ti.grouped(ti.ndrange(s, s, s)):
+                set(c + ivec3(s * (15 - x), s * (15 - y), 0) + p, 1, color, noise)
+                set(c + ivec3(s * x, s * (15 - y), 15 * s) + p, 1, color, noise)
+                set(c + ivec3(s * (15 - x), 0, s * y) + p, 1, color, noise)
+                set(c + ivec3(s * x, 15 * s, s * y) + p, 1, color, noise)
+                set(c + ivec3(0, s * (15 - y), s * x) + p, 1, color, noise)
+                set(c + ivec3(15 * s, s * (15 - y), s * (15 - x)) + p, 1, color, noise)
     
     initializePickaxe()
-    px, py, pz, s = 0, -18, -56, 4
+    c, s = ivec3(0, -18, -56), 4
     for x, y in ti.ndrange(13, 13):
         d = pickaxe[y, x]
         if d != 0:
             color, noise = pickaxePalette[d] + ti.random() * vec3(0.05), vec3(0.05)
             mat = 2 if d == 5 else 1
-            for x1, y1, z1 in ti.ndrange(s, s, s):
-                set(vec3(px + x1, py + s * y + y1, pz + s * x + z1), mat, color, noise)
+            for p in ti.grouped(ti.ndrange(s, s, s)):
+                set(c + ivec3(0, s * y, s * x) + p, mat, color, noise)
 
 initialize(); scene.finish()
