@@ -22,7 +22,8 @@ def initializeOre():
         if ok:
             for x in range(x0, x0 + d): set(ivec3(x, 63, y0), 1)
     for x, y in ti.ndrange((2, 14), (2, 14)):
-        if ti.random() < 0.1 and get(ivec3(x - 1, 63, y))[0] + get(ivec3(x + 1, 63, y))[0] == 0: set(ivec3(x, 63, y), 1)
+        if ti.random() < 0.1 and get(ivec3(x - 1, 63, y))[0] + get(ivec3(x + 1, 63, y))[0] == 0:
+            set(ivec3(x, 63, y), 1)
 
 @ti.func
 def initializePickaxe():
