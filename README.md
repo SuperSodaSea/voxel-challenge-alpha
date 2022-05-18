@@ -16,6 +16,8 @@
 <a href="https://github.com/SuperSodaSea/voxel-challenge-alpha/blob/main/half_broken.py">Half-Broken</a>
 </p>
 
+Blog Link: https://zhuanlan.zhihu.com/p/516318773 (If you got 404, visit me later!)
+
 ---
 
 ## About Taichi Voxel Challenge
