@@ -10,6 +10,11 @@
 <br>
 <a href="https://github.com/SuperSodaSea/voxel-challenge-alpha/blob/main/shanghai.py">Shanghai</a>
 </p>
+<p align="center">
+<img src="half_broken.jpg" width="75%"></img>
+<br>
+<a href="https://github.com/SuperSodaSea/voxel-challenge-alpha/blob/main/half_broken.py">Half-Broken</a>
+</p>
 
 ---
 
