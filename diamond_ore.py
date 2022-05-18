@@ -2,7 +2,7 @@ from scene import Scene; import taichi as ti; from taichi.math import *
 
 scene = Scene(0, 2)
 scene.set_background_color((0.2, 0.2, 0.2))
-scene.set_floor(-1, (0.75, 0.75, 0.75))
+scene.set_floor(-1, (1.2, 1.2, 1.2))
 scene.set_directional_light((1, 0.5, -1), 0.3, (0.85, 0.9, 0.9))
 
 @ti.func
@@ -71,4 +71,6 @@ def initialize():
                 set(c + ivec3(0, s * y, s * x) + p, mat, color, noise)
     for p in ti.grouped(ti.ndrange((-64, 64), (62, 64), (-64, 64))): set(p, 0)
 
+# scene.camera._camera_pos[:] = [4.25, 1.25, 2.75]; scene.camera._lookat_pos[:] = [-8 / 64, -24 / 64, 8 / 64]
+# scene.renderer.set_camera_pos(*scene.camera.position); scene.renderer.set_look_at(*scene.camera.look_at)
 initialize(); scene.finish()
